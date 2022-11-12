@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 const BlogContext = React.createContext();
 
@@ -14,13 +14,17 @@ component by React. It is a reference to the child components that
 are wrapped by the provider component.
 ******************************************************************/
 export const BlogProvider = ({ children }) => {
-  const blogPosts = [
-    { title: "Blog Post #1", body: "This is the body of blog post #1" },
-    { title: "Blog Post #2", body: "This is the body of blog post #2" },
-    { title: "Blog Post #3", body: "This is the body of blog post #3" },
-    { title: "Blog Post #4", body: "This is the body of blog post #4" },
-    { title: "Blog Post #5", body: "This is the body of blog post #5" },
-  ];
+  const [blogPosts, setBlogPosts] = useState([]);
+
+  const addBlogPost = () => {
+    setBlogPosts([
+      ...blogPosts,
+      {
+        title: `Blog Post #${blogPosts.length + 1}`,
+        body: `This is the body of blog post #${blogPosts.length + 1}`
+      },
+    ]);
+  };
 
   /******************************************************************
   The `value` prop is used to pass data to all child components.
@@ -28,7 +32,10 @@ export const BlogProvider = ({ children }) => {
   or function.
   ******************************************************************/
   return (
-    <BlogContext.Provider value={blogPosts}>
+    <BlogContext.Provider
+      // `addBlogPost` is the same as `addBlogPost: addBlogPost`
+      value={{ data: blogPosts, addBlogPost }}
+    >
       {children}
     </BlogContext.Provider>
   );
